@@ -1,0 +1,17 @@
+// Proses Refund (Backend Logic)
+try {
+    $db->beginTransaction();
+
+    // 1. Ambil data showtime_id dan seat_id dari tiket yang akan di-refund
+    // 2. Hapus tiket dari tabel tickets
+    // 3. Ubah status kursi di seat_availability kembali jadi 'available'
+    $stmt = $db->prepare("UPDATE seat_availability SET status_kursi = 'available' 
+                          WHERE showtime_id = :sid AND seat_id = :seid");
+    $stmt->execute(['sid' => $showtime_id, 'seid' => $seat_id]);
+
+    $db->commit();
+    Response::success("Tiket berhasil di-refund, kursi sudah tersedia kembali.");
+} catch (Exception $e) {
+    $db->rollBack();
+    Response::error("Gagal refund: " . $e->getMessage());
+}
