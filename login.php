@@ -99,7 +99,7 @@
                         window.location.href = "admin.php";
                     } else {
                         // Jika user biasa, diarahkan ke halaman utama
-                        window.location.href = "index.php";
+                        window.location.href = "<?php echo getenv('APP_URL'); ?>";
                     }
                     
                 } else {
