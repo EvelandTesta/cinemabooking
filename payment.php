@@ -121,7 +121,7 @@
     </main>
 
     <script>
-        const API_BASE_URL = getenv('API_BASE_URL');
+        const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
 
         const urlParams = new URLSearchParams(window.location.search);
         const bookingId = urlParams.get('booking_id');

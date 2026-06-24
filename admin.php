@@ -223,7 +223,7 @@
     <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-2 pointer-events-none"></div>
 
     <script>
-        const API_BASE_URL = getenv('API_BASE_URL');
+        const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
 
         let currentTargetFitur = '';
         let currentEditId = null;
