@@ -2,8 +2,8 @@
 class Database {
     private $host = "localhost";
     private $db_name = "db_bioskop";
-    private $username = "root";
-    private $password = "";
+    private $username = "useradmin";
+    private $password = "123456";
     public $conn;
 
     public function getConnection() {
