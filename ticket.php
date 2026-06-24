@@ -70,7 +70,7 @@
                 </div>
                 <p id="tkt-code-label" class="text-xs font-mono font-bold tracking-widest text-slate-400 mt-3 uppercase">FB-PENDING</p>
                 
-                <a href="index.php" class="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white text-center font-bold py-3 px-4 rounded-xl text-sm transition duration-150">
+                <a href="<?php echo getenv('APP_URL'); ?>" class="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white text-center font-bold py-3 px-4 rounded-xl text-sm transition duration-150">
                     Kembali ke Beranda
                 </a>
             </div>
@@ -86,7 +86,7 @@
 
         if (!bookingId) {
             alert("Akses tiket tidak sah!");
-            window.location.href = "index.php";
+            window.location.href = "<?php echo getenv('APP_URL'); ?>";
         }
 
         async function loadFinalTicket() {
@@ -180,7 +180,7 @@
 
                 } else {
                     alert("Data tiket gagal diverifikasi.");
-                    window.location.href = "index.php";
+                    window.location.href = "<?php echo getenv('APP_URL'); ?>";
                 }
             } catch (error) {
                 console.error("Error loading ticket page:", error);

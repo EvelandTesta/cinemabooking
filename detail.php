@@ -13,8 +13,8 @@
     <header class="bg-white shadow-sm w-full flex items-center z-10 border-b border-slate-100">
         <div class="container mx-auto px-6">
             <div class="flex items-center justify-between relative py-4 max-w-4xl mx-auto">
-                <a href="index.php" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
-                <a href="index.php" class="text-sm font-semibold text-violet hover:underline">← Kembali ke Beranda</a>
+                <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
+                <a href="<?php echo getenv('APP_URL'); ?>" class="text-sm font-semibold text-violet hover:underline">← Kembali ke Beranda</a>
             </div>
         </div>
     </header>
@@ -109,7 +109,7 @@
 
         if (!movieId) {
             alert("ID Film tidak ditemukan!");
-            window.location.href = "index.php";
+            window.location.href = "<?php echo getenv('APP_URL'); ?>";
         }
 
         function switchTab(target) {

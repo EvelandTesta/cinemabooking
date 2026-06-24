@@ -25,7 +25,7 @@
     <!-- Header -->
     <header class="bg-white shadow-sm border-b border-slate-200">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="index.php" class="text-2xl font-bold text-slate-900">
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-bold text-slate-900">
                 Flick<span class="text-violet">Book</span>
             </a>
 
@@ -34,7 +34,7 @@
                    class="hidden bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-xl font-bold text-sm transition">
                     Dashboard Admin
                 </a>
-                <a href="index.php"
+                <a href="<?php echo getenv('APP_URL'); ?>"
                    class="bg-violet hover:bg-violet-600 text-white px-5 py-2 rounded-xl font-bold text-sm transition">
                     Kembali ke Home
                 </a>

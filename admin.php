@@ -35,7 +35,7 @@
     <!-- ============ SIDEBAR ============ -->
     <aside class="w-full md:w-64 bg-dark text-white flex flex-col z-40 md:sticky md:top-0 md:h-screen shadow-xl">
         <div class="p-6 border-b border-slate-800 flex justify-between items-center">
-            <a href="index.php" class="text-2xl font-black tracking-tighter text-white">Flick<span class="text-violet">Book</span></a>
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-black tracking-tighter text-white">Flick<span class="text-violet">Book</span></a>
             <span class="text-xs font-bold bg-violet/20 text-violet px-2 py-1 rounded border border-violet/30 uppercase">Admin</span>
         </div>
 
@@ -61,7 +61,7 @@
         </nav>
 
         <div class="p-4 border-t border-slate-800 space-y-2">
-            <a href="index.php" class="w-full flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white py-2.5 rounded-xl text-xs font-bold transition duration-150">
+            <a href="<?php echo getenv('APP_URL'); ?>" class="w-full flex items-center justify-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white py-2.5 rounded-xl text-xs font-bold transition duration-150">
                 <span>Ke Halaman Utama</span>
             </a>
             <a href="logout.php" id="btn-logout-admin" class="w-full flex items-center justify-center space-x-2 bg-red-900/40 hover:bg-red-800/60 text-red-400 hover:text-red-200 py-2.5 rounded-xl text-xs font-bold transition duration-150 border border-red-800/30">
@@ -248,7 +248,7 @@
             if (userRole !== "admin") {
                 // Logged in but not an admin, redirect to main page
                 alert("Akses ditolak! Halaman ini hanya untuk Administrator.");
-                window.location.href = "index.php";
+                window.location.href = "<?php echo getenv('APP_URL'); ?>";
                 return;
             }
 

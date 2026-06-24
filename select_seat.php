@@ -15,7 +15,7 @@
 
     <header class="bg-slate-900 border-b border-slate-800 w-full py-4">
         <div class="container mx-auto px-6 flex justify-between items-center max-w-6xl">
-            <a href="index.php" class="text-2xl font-bold tracking-wider text-white">Flick<span class="text-violet">Book</span></a>
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-bold tracking-wider text-white">Flick<span class="text-violet">Book</span></a>
             <button onclick="history.back()" class="text-sm text-violet hover:underline font-semibold">← Kembali ke Detail Film</button>
         </div>
     </header>
@@ -98,7 +98,7 @@
 
         if (!showtimeId) {
             alert("Sesi jadwal tayang tidak valid!");
-            window.location.href = "index.php";
+            window.location.href = "<?php echo getenv('APP_URL'); ?>";
         }
 
         let ticketPrice = 0;

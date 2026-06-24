@@ -23,7 +23,7 @@
 
     <header class="bg-white shadow-sm w-full py-4 border-b border-slate-100 sticky top-0 z-50">
         <div class="container mx-auto px-6 flex justify-between items-center max-w-5xl">
-            <a href="index.php" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
             <span class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 uppercase tracking-wider">Selesaikan Pembayaran</span>
         </div>
     </header>
@@ -112,7 +112,7 @@
                         <button id="btn-pay-now" class="w-full bg-violet hover:bg-violet/90 text-white font-black py-4 rounded-2xl shadow-lg shadow-violet/10 hover:shadow-xl transition-all duration-200 text-sm tracking-wider uppercase">
                             Simulasi Bayar Sekarang
                         </button>
-                        <a href="index.php" class="w-full block text-center text-xs text-slate-400 hover:text-red-500 font-semibold pt-2 transition duration-150">
+                        <a href="<?php echo getenv('APP_URL'); ?>" class="w-full block text-center text-xs text-slate-400 hover:text-red-500 font-semibold pt-2 transition duration-150">
                             Batalkan & Kembali ke Beranda
                         </a>
                     </div>
@@ -130,7 +130,7 @@
 
         if (!bookingId) {
             alert("ID Pemesanan tidak valid!");
-            window.location.href = "index.php";
+            window.location.href = "<?php echo getenv('APP_URL'); ?>";
         }
 
         let paymentId = null; 
@@ -223,7 +223,7 @@
 
                 } else {
                     alert("Tagihan tidak ditemukan atau sudah kedaluwarsa.");
-                    window.location.href = "index.php";
+                    window.location.href = "<?php echo getenv('APP_URL'); ?>";
                 }
             } catch (error) {
                 console.error("Gagal memuat invoice pembayaran:", error);

@@ -1,3 +1,5 @@
+<?php include 'env.php'; ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -21,8 +23,8 @@
 
     <header class="bg-white shadow-sm w-full py-4 border-b border-slate-100 sticky top-0 z-50">
         <div class="container mx-auto px-6 flex justify-between items-center max-w-4xl">
-            <a href="index.php" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
-            <a href="index.php" class="text-sm font-semibold text-violet hover:underline">← Kembali ke Beranda</a>
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-2xl font-bold tracking-wider text-slate-900">Flick<span class="text-violet">Book</span></a>
+            <a href="<?php echo getenv('APP_URL'); ?>" class="text-sm font-semibold text-violet hover:underline">← Kembali ke Beranda</a>
         </div>
     </header>
 
