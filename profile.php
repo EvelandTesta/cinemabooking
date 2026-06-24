@@ -1,3 +1,5 @@
+<?php include 'env.php'; ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -92,7 +94,7 @@
     </footer>
 
     <script>
-        const API_BASE_URL = getenv('API_BASE_URL');
+        const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
 
         // Validasi Sesi Pengguna
         function checkUserSession() {

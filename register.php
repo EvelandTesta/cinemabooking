@@ -1,3 +1,5 @@
+<?php include 'env.php'; ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -80,7 +82,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = getenv('API_BASE_URL');
+        const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
 
         // Fungsi pembantu untuk memicu pesan eror visual tanpa menutup jalannya alur input data
         function triggerError(message) {

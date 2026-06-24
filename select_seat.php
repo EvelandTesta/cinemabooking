@@ -1,3 +1,5 @@
+<?php include 'env.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,7 +91,7 @@
     </main>
 
     <script>
-        const API_BASE_URL = getenv('API_BASE_URL');
+        const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
 
         const urlParams = new URLSearchParams(window.location.search);
         const showtimeId = urlParams.get('showtime_id');
