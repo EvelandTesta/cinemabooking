@@ -110,96 +110,88 @@
 </head>
 <body class="bg-primary"> 
     
-    <header id="main-header" class="fixed top-0 left-0 w-full flex items-center z-50 transition-all duration-300">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between relative">
-                <div class="px-4">
-                    <a href="#home" id="logo" class="text-2xl font-bold tracking-wider block py-6">Flick<span class="text-violet">Book</span></a>
-                </div>
+    <header id="main-header" class="w-full flex items-center transition-all duration-300">
+        <div class="container mx-auto px-4 max-w-287.5">
+        <div class="flex items-center justify-between relative w-full">
+            
+            <div class="shrink-0">
+                <a href="#home" id="logo" class="text-xl sm:text-2xl font-bold tracking-wider block py-5 sm:py-6">
+                    Flick<span class="text-violet">Book</span>
+                </a>
+            </div>
 
-                <div class="flex items-center gap-3">
-                    <button id="hamburger" name="hamburger" type="button" class="block absolute right-4 lg:hidden cursor-pointer">
-                        <span class="hamburger-line transition duration-300 ease-in-out origin-top-left"></span>
-                        <span class="hamburger-line transition duration-300 ease-in-out"></span>
-                        <span class="hamburger-line transition duration-300 ease-in-out origin-bottom-left"></span>
+            <div class="flex items-center gap-4 sm:gap-6">
+                
+                <nav id="nav-menu" class="hidden sm:block">
+                    <ul class="flex items-center gap-2 md:gap-4">
+                        <li class="group"><a href="#home" class="nav-link text-sm md:text-base py-2 px-2 md:px-4 flex group-hover:text-violet">Home</a></li>
+                        <li class="group"><a href="#now-showing" class="nav-link text-sm md:text-base py-2 px-2 md:px-4 flex group-hover:text-violet">Now Showing</a></li>
+                        <li class="group"><a href="#coming-soon" class="nav-link text-sm md:text-base py-2 px-2 md:px-4 flex group-hover:text-violet">Coming Soon</a></li>
+                        <li class="group"><a href="#promo" class="nav-link text-sm md:text-base py-2 px-2 md:px-4 flex group-hover:text-violet">Promo</a></li>
+                        <li class="group"><a href="#partners" class="nav-link text-sm md:text-base py-2 px-2 md:px-4 flex group-hover:text-violet">Partners</a></li>
+                    </ul>
+                </nav>
+
+                <div id="profile-wrapper" class="hidden relative items-center">
+                    <button id="profile-btn" onclick="toggleProfileDropdown()"
+                        title="Profile"
+                        class="profile-avatar-circle"
+                        style="background: linear-gradient(135deg, #7C3AED, #5b21b6); cursor: pointer; border: none;">
+                        <span id="profile-avatar" class="text-white font-black text-sm leading-none">U</span>
                     </button>
-                    <nav id="nav-menu" class="hidden absolute py-5 shadow-lg rounded-lg max-w-62.5 w-full right-4 top-full lg:block lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none">
-                        <ul class="block lg:flex lg:items-center">
-                            <li class="group"><a href="#home" class="nav-link text-base py-2 mx-8 flex group-hover:text-violet">Home</a></li>
-                            <li class="group"><a href="#now-showing" class="nav-link text-base py-2 mx-8 flex group-hover:text-violet">Now Showing</a></li>
-                            <li class="group"><a href="#coming-soon" class="nav-link text-base py-2 mx-8 flex group-hover:text-violet">Coming Soon</a></li>
-                            <li class="group"><a href="#promo" class="nav-link text-base py-2 mx-8 flex group-hover:text-violet">Promo</a></li>
-                            <li class="group"><a href="#partners" class="nav-link text-base py-2 mx-8 flex group-hover:text-violet">Partners</a></li>
-                        </ul>
-                    </nav>
 
-                    <!-- Profile Button -->
-                    <div id="profile-wrapper" class="relative hidden lg:flex items-center mr-2">
-                        <!-- Circular avatar button -->
-                        <button id="profile-btn" onclick="toggleProfileDropdown()"
-                            title="Profile"
-                            class="profile-avatar-circle"
-                            style="background: linear-gradient(135deg, #7C3AED, #5b21b6); cursor: pointer; border: none;">
-                            <span id="profile-avatar" class="text-white font-black text-sm leading-none">U</span>
-                        </button>
+                    <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-60 rounded-2xl overflow-hidden z-50"
+                        style="background:#fff; box-shadow:0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08); border:1px solid rgba(0,0,0,0.07);">
 
-                        <!-- Dropdown -->
-                        <div id="profile-dropdown" class="hidden absolute right-0 top-full mt-2 w-60 rounded-2xl overflow-hidden z-50"
-                            style="background:#fff; box-shadow:0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08); border:1px solid rgba(0,0,0,0.07);">
-
-                            <!-- Header -->
-                            <div class="px-4 py-4" style="background: linear-gradient(135deg, #7C3AED 0%, #5b21b6 100%);">
-                                <div class="flex items-center gap-3">
-                                    <div id="dropdown-avatar" class="dropdown-avatar-circle"
-                                        style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4); color:#fff; font-weight:900; font-size:16px;">U</div>
-                                    <div style="overflow:hidden;">
-                                        <p id="dropdown-name" class="font-black text-white text-sm truncate">User</p>
-                                        <span id="dropdown-role"
-                                            class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide mt-0.5"
-                                            style="background:rgba(255,255,255,0.25); color:#fff;">user</span>
-                                    </div>
+                        <div class="px-4 py-4" style="background: linear-gradient(135deg, #7C3AED 0%, #5b21b6 100%);">
+                            <div class="flex items-center gap-3">
+                                <div id="dropdown-avatar" class="dropdown-avatar-circle"
+                                    style="background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.4); color:#fff; font-weight:900; font-size:16px;">U</div>
+                                <div style="overflow:hidden;">
+                                    <p id="dropdown-name" class="font-black text-white text-sm truncate">User</p>
+                                    <span id="dropdown-role"
+                                        class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide mt-0.5"
+                                        style="background:rgba(255,255,255,0.25); color:#fff;">user</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Menu Items -->
-                            <div class="py-1">
-                                <a href="profile.php" class="dropdown-item"
-                                    style="color:#1e1b4b;"
-                                    onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';"
-                                    onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                    Profil Saya
-                                </a>
-                                <a href="my_tickets.php" class="dropdown-item"
-                                    style="color:#1e1b4b;"
-                                    onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';"
-                                    onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
-                                    Tiket Saya
-                                </a>
-                                <a href="etc.php" class="dropdown-item"
-                                    style="color:#1e1b4b;"
-                                    onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';"
-                                    onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                                    Pusat Bantuan
-                                </a>
-                            </div>
+                        <div class="block sm:hidden py-1 border-b border-slate-100">
+                            <div class="px-4 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">Navigasi</div>
+                            <a href="#home" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">Home</a>
+                            <a href="#now-showing" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">Now Showing</a>
+                            <a href="#coming-soon" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">Coming Soon</a>
+                            <a href="#promo" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">Promo</a>
+                            <a href="#partners" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">Partners</a>
+                        </div>
 
-                            <!-- Logout -->
-                            <div style="border-top:1px solid #f1f5f9;">
-                                <a href="logout.php" class="dropdown-item"
-                                    style="color:#ef4444;"
-                                    onmouseover="this.style.background='#fff5f5';"
-                                    onmouseout="this.style.background='';">
-                                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                                    Logout
-                                </a>
-                            </div>
+                        <div class="py-1">
+                            <div class="px-4 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider block sm:hidden">Akun Saya</div>
+                            <a href="profile.php" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                Profil Saya
+                            </a>
+                            <a href="my_tickets.php" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                                Tiket Saya
+                            </a>
+                            <a href="etc.php" class="dropdown-item" style="color:#1e1b4b;" onmouseover="this.style.background='#f5f3ff'; this.style.color='#7C3AED';" onmouseout="this.style.background=''; this.style.color='#1e1b4b';">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                Pusat Bantuan
+                            </a>
+                        </div>
+
+                        <div style="border-top:1px solid #f1f5f9;">
+                            <a href="logout.php" class="dropdown-item" style="color:#ef4444;" onmouseover="this.style.background='#fff5f5';" onmouseout="this.style.background='';">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                Logout
+                            </a>
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
         </div>
     </header>
 
@@ -237,17 +229,19 @@
 
     <section id="coming-soon" class="pt-24 pb-24 bg-dark">
         <div class="container mx-auto px-4 max-w-287.5">
-            <div class="w-full px-4 mb-10 flex items-center justify-between">
-                <div>
-                    <h4 class="font-bold text-lg text-violet uppercase tracking-wider mb-2">Akan Datang</h4>
-                    <h2 class="font-bold text-white text-3xl sm:text-4xl">Coming Soon</h2>
-                    <div class="w-16 h-1 bg-violet mt-3 rounded-full"></div>
-                </div>
-                <a href="#" class="text-sm font-bold text-white border border-slate-800 bg-slate-900 px-5 py-2 rounded-lg hover:bg-violet hover:text-dark transition duration-300">
-                    Lihat Semua
-                </a>
+            <div class="w-full px-4 mb-10">
+                <h4 class="font-bold text-lg text-violet uppercase tracking-wider mb-2">Akan Datang</h4>
+                <h2 class="font-bold text-white text-3xl sm:text-4xl">Coming Soon</h2>
+                <div class="w-16 h-1 bg-violet mt-3 rounded-full"></div>
             </div>
+            
             <div id="coming-soon-container" class="flex flex-wrap -mx-4"></div>
+
+            <div class="w-full flex justify-center mt-10">
+                <button id="view-more-btn" onclick="loadNextComingSoonPage()" class="hidden text-sm font-bold text-white border border-slate-800 bg-slate-900 px-8 py-3 rounded-lg hover:bg-violet hover:text-dark transition duration-300">
+                    View More
+                </button>
+            </div>
         </div>
     </section>
 
@@ -259,9 +253,6 @@
                     <h2 class="font-bold text-slate-900 text-3xl sm:text-4xl">Promo & Event Terkini</h2>
                     <div class="w-16 h-1 bg-violet mt-3 rounded-full"></div>
                 </div>  
-                <a href="#" class="text-sm font-bold text-slate-600 border border-violet px-5 py-2 rounded-lg hover:bg-violet hover:text-primary transition duration-300">
-                    Lihat Semua Promo
-                </a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
@@ -327,13 +318,13 @@
             </div>
             <div class="w-full px-4">
                 <div class="flex flex-wrap items-center justify-evenly">
-                    <a href="#" class="max-w-30 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
+                    <a href="https://21cineplex.com/" target="_blank" rel="noopener noreferrer" class="max-w-30 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
                         <img src="dist/img/partners/XXI.svg" alt="XXI">
                     </a>
-                    <a href="#" class="max-w-30 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
+                    <a href="https://www.cgv.id/" target="_blank" rel="noopener noreferrer" class="max-w-30 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
                         <img src="dist/img/partners/CGV_logo.svg" alt="CGV">
                     </a>
-                    <a href="#" class="max-w-50 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
+                    <a href="https://cinepolis.co.id/" target="_blank" rel="noopener noreferrer" class="max-w-50 mx-4 py-4 grayscale opacity-60 transition duration-500 hover:grayscale-0 hover:opacity-100 lg:mx-6 xl:mx-8">
                         <img src="dist/img/partners/Cinepolis.svg" alt="Cinepolis">
                     </a>
                 </div>
@@ -401,7 +392,12 @@
             },
         });
 
+        // Tetap menggunakan base URL bawaan dari modifikasi temanmu
         const API_BASE_URL = "<?php echo getenv('API_BASE_URL'); ?>";
+
+        // State global untuk data pagination coming soon
+        let globalComingSoonMovies = [];
+        let comingSoonCurrentLimit = 4; // Mengatur limit awal default 4 film
 
         // Fungsi Pembantu Rating Class
         function getRatingClass(ratingString) {
@@ -417,10 +413,15 @@
                 if (result.status === "success" && Array.isArray(result.data)) {
                     const allMovies = result.data;
                     const nowShowingMovies = allMovies.filter(movie => movie.status_tayang === 'now_playing');
-                    const comingSoonMovies = allMovies.filter(movie => movie.status_tayang === 'upcoming');
+                    
+                    // Simpan data upcoming di variabel global agar bisa dipagination
+                    globalComingSoonMovies = allMovies.filter(movie => movie.status_tayang === 'upcoming');
 
                     renderNowShowing(nowShowingMovies);
-                    renderComingSoon(comingSoonMovies);
+                    
+                    // Jalankan fungsi pagination coming soon
+                    comingSoonCurrentLimit = 4;
+                    renderComingSoonPagination();
                 } else {
                     console.error("Gagal memuat data film dari API:", result.message);
                 }
@@ -464,17 +465,22 @@
             });
         }
 
-        // Render Film Coming Soon
-        function renderComingSoon(movies) {
+        // Render Film Coming Soon Dengan Sistem Pagination Slice
+        function renderComingSoonPagination() {
             const container = document.getElementById("coming-soon-container");
+            const viewMoreBtn = document.getElementById("view-more-btn");
             container.innerHTML = ""; 
 
-            if (movies.length === 0) {
+            if (globalComingSoonMovies.length === 0) {
                 container.innerHTML = `<div class="w-full text-center py-8 text-slate-400">Belum ada daftar film yang akan datang.</div>`;
+                viewMoreBtn.classList.add("hidden");
                 return;
             }
 
-            movies.forEach(movie => {
+            // Memotong array data film dari indeks 0 sampai batas limit saat ini
+            const slicedMovies = globalComingSoonMovies.slice(0, comingSoonCurrentLimit);
+
+            slicedMovies.forEach(movie => {
                 const rating = movie.rating_umur || "SU";
                 const colorClass = getRatingClass(rating);
 
@@ -497,6 +503,19 @@
                 </div>`;
                 container.innerHTML += cardHTML;
             });
+
+            // Tampilkan tombol View More jika jumlah seluruh film lebih besar dari limit saat ini
+            if (globalComingSoonMovies.length > comingSoonCurrentLimit) {
+                viewMoreBtn.classList.remove("hidden");
+            } else {
+                viewMoreBtn.classList.add("hidden");
+            }
+        }
+
+        // Aksi ketika tombol View More ditekan (pagination menambahkan 4 item berikutnya)
+        function loadNextComingSoonPage() {
+            comingSoonCurrentLimit += 4;
+            renderComingSoonPagination();
         }
 
         // Toggle profile dropdown
