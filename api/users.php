@@ -123,34 +123,101 @@ switch($method) {
             exit();
         }
         
-        if(!empty($data->user_id)) {
-            try{
-                $role = !empty($data->role) ? $data->role : 'user';
-                $query = "UPDATE users SET 
-                          nama = :nama, 
-                          email = :email, 
-                          no_hp = :no_hp,
-                          role = :role
-                          WHERE user_id = :user_id";
+        if (empty($data->user_id)) {
+            Response::error("User ID required", 400);
+            exit();
+        }
 
-                $stmt = $db->prepare($query);
-
-                $stmt->bindParam(':user_id', $data->user_id);
-                $stmt->bindParam(':nama', $data->nama);
-                $stmt->bindParam(':email', $data->email);
-                $stmt->bindParam(':no_hp', $data->no_hp);
-                $stmt->bindParam(':role', $role);
-
-                if($stmt->execute()) {
-                    Response::success("User updated successfully", ["status" => "Updated"]);
-                } else {
-                    Response::error("Failed to update user", 500);
+        // ─── GANTI PASSWORD 
+        if (!empty($data->current_password) && !empty($data->new_password)) {
+            try {
+                if (strlen($data->new_password) < 6) {
+                    Response::error("Bad Request: Password baru minimal 6 karakter", 400);
+                    exit();
                 }
-            } catch(PDOException $e) {
+
+                // Ambil hash password saat ini
+                $stmt = $db->prepare("SELECT password_hash FROM users WHERE user_id = :user_id LIMIT 1");
+                $stmt->bindParam(':user_id', $data->user_id);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$user) {
+                    Response::error("Not Found: User tidak ditemukan", 404);
+                    exit();
+                }
+
+                // Verifikasi password lama
+                if (!password_verify($data->current_password, $user['password_hash'])) {
+                    Response::error("Unauthorized: Password saat ini tidak cocok", 401);
+                    exit();
+                }
+
+                // Update ke password baru
+                $newHash = password_hash($data->new_password, PASSWORD_BCRYPT);
+                $stmtUpd = $db->prepare("UPDATE users SET password_hash = :hash WHERE user_id = :user_id");
+                $stmtUpd->bindParam(':hash', $newHash);
+                $stmtUpd->bindParam(':user_id', $data->user_id);
+
+                if ($stmtUpd->execute()) {
+                    Response::success("Password berhasil diperbarui");
+                } else {
+                    Response::error("Gagal memperbarui password", 500);
+                }
+            } catch (PDOException $e) {
                 Response::error("Internal Server Error: " . $e->getMessage(), 500);
             }
-        } else {
-            Response::error("User ID required", 400);
+            break;
+        }
+
+        // ─── RESET PASSWORD 
+        if (!empty($data->admin_reset) && $data->admin_reset === true && !empty($data->new_password)) {
+            try {
+                if (strlen($data->new_password) < 6) {
+                    Response::error("Bad Request: Password baru minimal 6 karakter", 400);
+                    exit();
+                }
+
+                $newHash = password_hash($data->new_password, PASSWORD_BCRYPT);
+                $stmt = $db->prepare("UPDATE users SET password_hash = :hash WHERE user_id = :user_id");
+                $stmt->bindParam(':hash', $newHash);
+                $stmt->bindParam(':user_id', $data->user_id);
+
+                if ($stmt->execute()) {
+                    Response::success("Password pengguna berhasil direset oleh admin");
+                } else {
+                    Response::error("Gagal mereset password", 500);
+                }
+            } catch (PDOException $e) {
+                Response::error("Internal Server Error: " . $e->getMessage(), 500);
+            }
+            break;
+        }
+
+        // ─── UPDATE PROFIL BIASA (nama, email, no_hp, role) ───
+        try {
+            $role = !empty($data->role) ? $data->role : 'user';
+            $query = "UPDATE users SET 
+                      nama = :nama, 
+                      email = :email, 
+                      no_hp = :no_hp,
+                      role = :role
+                      WHERE user_id = :user_id";
+
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':user_id', $data->user_id);
+            $stmt->bindParam(':nama', $data->nama);
+            $stmt->bindParam(':email', $data->email);
+            $stmt->bindParam(':no_hp', $data->no_hp);
+            $stmt->bindParam(':role', $role);
+
+            if ($stmt->execute()) {
+                Response::success("User updated successfully", ["status" => "Updated"]);
+            } else {
+                Response::error("Failed to update user", 500);
+            }
+        } catch (PDOException $e) {
+            Response::error("Internal Server Error: " . $e->getMessage(), 500);
         }
         break;
 

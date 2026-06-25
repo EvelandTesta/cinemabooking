@@ -85,6 +85,41 @@
                     </button>
                 </div>
             </form>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3 my-6">
+                <div class="flex-1 h-px bg-slate-200"></div>
+                <span class="text-xs font-black text-slate-400 uppercase tracking-wider">Keamanan Akun</span>
+                <div class="flex-1 h-px bg-slate-200"></div>
+            </div>
+
+            <!-- Ganti Password Form -->
+            <form id="change-password-form" class="space-y-4">
+                <div>
+                    <label for="cp-current" class="text-xs font-black text-slate-500 uppercase tracking-wider block mb-2">Password Saat Ini</label>
+                    <input type="password" id="cp-current" required
+                           placeholder="Masukkan password saat ini"
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet/20 transition duration-150">
+                </div>
+                <div>
+                    <label for="cp-new" class="text-xs font-black text-slate-500 uppercase tracking-wider block mb-2">Password Baru</label>
+                    <input type="password" id="cp-new" required
+                           placeholder="Minimal 6 karakter"
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet/20 transition duration-150">
+                </div>
+                <div>
+                    <label for="cp-confirm" class="text-xs font-black text-slate-500 uppercase tracking-wider block mb-2">Konfirmasi Password Baru</label>
+                    <input type="password" id="cp-confirm" required
+                           placeholder="Ulangi password baru"
+                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-violet focus:ring-2 focus:ring-violet/20 transition duration-150">
+                </div>
+                <div class="pt-1">
+                    <button type="submit" id="btn-change-password"
+                            class="w-full bg-slate-800 hover:bg-slate-900 text-white font-black py-4 rounded-2xl shadow-lg shadow-slate-800/15 hover:scale-[1.01] active:scale-[0.99] transition duration-200 cursor-pointer text-sm tracking-wider uppercase">
+                        Simpan Password Baru
+                    </button>
+                </div>
+            </form>
         </div>
     </main>
 
@@ -162,27 +197,15 @@
             try {
                 const response = await fetch(`${API_BASE_URL}/users.php`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        user_id: userId,
-                        nama: nama,
-                        email: email,
-                        no_hp: no_hp,
-                        role: role
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, nama, email, no_hp, role })
                 });
 
                 const result = await response.json();
 
                 if (result.status === "success") {
-                    // Update session storage lokal
                     sessionStorage.setItem("user_name", nama);
-                    
                     alert("Profil berhasil diperbarui!");
-                    
-                    // Reload data visual
                     loadUserProfile();
                 } else {
                     alert("Gagal memperbarui profil: " + result.message);
@@ -193,6 +216,58 @@
             } finally {
                 btnSave.disabled = false;
                 btnSave.innerText = "Simpan Perubahan";
+            }
+        });
+
+        // Submit form ganti password
+        document.getElementById("change-password-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const userId = checkUserSession();
+            if (!userId) return;
+
+            const currentPassword = document.getElementById("cp-current").value;
+            const newPassword = document.getElementById("cp-new").value;
+            const confirmPassword = document.getElementById("cp-confirm").value;
+
+            if (newPassword.length < 6) {
+                alert("Password baru minimal 6 karakter.");
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                alert("Konfirmasi password baru tidak cocok!");
+                return;
+            }
+
+            const btn = document.getElementById("btn-change-password");
+            btn.disabled = true;
+            btn.innerText = "Menyimpan...";
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/users.php`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    alert("Password berhasil diperbarui! Silakan login kembali dengan password baru.");
+                    sessionStorage.clear();
+                    window.location.href = "logout.php";
+                } else {
+                    alert("Gagal: " + (result.message || "Terjadi kesalahan."));
+                }
+            } catch (error) {
+                console.error("Error changing password:", error);
+                alert("Terjadi kesalahan koneksi server.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Simpan Password Baru";
             }
         });
 

@@ -176,7 +176,7 @@
                 <table class="w-full text-left border-collapse min-w-[700px]">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-xs font-bold uppercase tracking-wider">
-                            <th class="p-4">ID</th><th class="p-4">Film</th><th class="p-4">Studio</th><th class="p-4">Tanggal</th><th class="p-4">Jam</th><th class="p-4">Harga</th><th class="p-4 text-center">Aksi</th>
+                            <th class="p-4">ID</th><th class="p-4">Film</th><th class="p-4">Bioskop</th><th class="p-4">Studio</th><th class="p-4">Tanggal</th><th class="p-4">Jam</th><th class="p-4">Harga</th><th class="p-4 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="table-showtimes-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -220,6 +220,8 @@
             </form>
         </div>
     </div>
+
+
 
     <!-- Toast Notification -->
     <div id="toast-container" class="fixed bottom-6 right-6 z-[100] space-y-2 pointer-events-none"></div>
@@ -351,18 +353,57 @@
         }
 
         // ─── SHOWTIME MODAL ───
+        function renderStudioSelectForShowtime(cinemaId, currentStudioId = null) {
+            const filteredStudios = globalCachedStudios.filter(s => s.cinema_id == cinemaId);
+            const studioOpts = filteredStudios.map(s => ({ value: s.studio_id, label: s.nama_studio }));
+            
+            const container = document.getElementById('studio-select-container');
+            if (container) {
+                container.innerHTML = buildField('Studio', 'inp-studio-id', 'select', {
+                    value: currentStudioId,
+                    options: studioOpts.length ? studioOpts : [{ value: '', label: '-- Tidak Ada Studio di Bioskop Ini --' }]
+                });
+            }
+        }
+
         function openShowtimeModal(data = null) {
             currentTargetFitur = 'showtimes';
             currentEditId = data ? data.showtime_id : null;
             const d = data || {};
             const movieOpts = globalCachedMovies.map(m => ({ value: m.movie_id, label: m.judul }));
-            const studioOpts = globalCachedStudios.map(s => ({ value: s.studio_id, label: `#${s.studio_id} - ${s.nama_studio}` }));
+            
+            // Find current cinema if editing
+            let selectedCinemaId = '';
+            if (data && data.studio_id) {
+                const std = globalCachedStudios.find(s => s.studio_id == data.studio_id);
+                if (std) {
+                    selectedCinemaId = std.cinema_id;
+                }
+            } else if (globalCachedCinemas.length > 0) {
+                selectedCinemaId = globalCachedCinemas[0].cinema_id;
+            }
+
+            const cinemaOpts = globalCachedCinemas.map(c => ({ value: c.cinema_id, label: `${c.nama_bioskop} (${c.kota})` }));
+            
             document.getElementById('form-fields').innerHTML =
                 buildField('Film', 'inp-movie-id', 'select', { value: d.movie_id, options: movieOpts.length ? movieOpts : [{ value:'', label:'-- Tidak Ada Film --' }] }) +
-                buildField('Studio', 'inp-studio-id', 'select', { value: d.studio_id, options: studioOpts.length ? studioOpts : [{ value:'', label:'-- Tidak Ada Studio --' }] }) +
+                buildField('Pilih Bioskop', 'inp-cinema-id-showtime', 'select', { value: selectedCinemaId, options: cinemaOpts.length ? cinemaOpts : [{ value:'', label:'-- Tidak Ada Bioskop --' }] }) +
+                `<div id="studio-select-container" class="space-y-4"></div>` +
                 buildField('Tanggal', 'inp-tanggal', 'date', { value: d.tanggal || '' }) +
                 buildField('Jam Tayang (HH:MM)', 'inp-jam', 'text', { value: d.jam ? d.jam.substring(0,5) : '', placeholder: '14:30' }) +
                 buildField('Harga Tiket (Rp)', 'inp-harga', 'number', { value: d.harga_tiket || '', placeholder: '50000' });
+            
+            // Add change listener to cinema select
+            const cinemaSelect = document.getElementById('inp-cinema-id-showtime');
+            if (cinemaSelect) {
+                cinemaSelect.addEventListener('change', function() {
+                    renderStudioSelectForShowtime(this.value);
+                });
+            }
+
+            // Initial render of studio select
+            renderStudioSelectForShowtime(selectedCinemaId, d.studio_id);
+
             openModal(data ? 'Edit Jadwal' : 'Buat Jadwal Tayang');
         }
 
@@ -376,7 +417,11 @@
                 buildField('Nama Lengkap', 'inp-nama-user', 'text', { value: d.nama || '', placeholder: 'Nama pengguna' }) +
                 buildField('Email', 'inp-email', 'email', { value: d.email || '', placeholder: 'user@email.com' }) +
                 buildField('No. HP', 'inp-nohp', 'text', { value: d.no_hp || '', placeholder: '081234567890', required: false }) +
-                (isEdit ? '' : buildField('Password', 'inp-password', 'password', { placeholder: 'Masukkan password' })) +
+                buildField(
+                    isEdit ? 'Password Baru (kosongkan jika tidak diubah)' : 'Password',
+                    'inp-password', 'password',
+                    { placeholder: isEdit ? 'Isi untuk mengganti password...' : 'Masukkan password', required: !isEdit }
+                ) +
                 buildField('Role', 'inp-role', 'select', { value: d.role || 'user', options: [{ value:'user', label:'User (Pelanggan)' }, { value:'admin', label:'Admin' }] });
             openModal(data ? 'Edit Pengguna' : 'Tambah Pengguna Baru');
         }
@@ -428,15 +473,28 @@
                     };
                     if (isEdit) payload.showtime_id = currentEditId.toString();
                 } else if (currentTargetFitur === 'users') {
+                    const newPw = document.getElementById('inp-password').value;
                     payload = {
                         nama: document.getElementById('inp-nama-user').value,
                         email: document.getElementById('inp-email').value,
                         no_hp: document.getElementById('inp-nohp').value,
                         role: document.getElementById('inp-role').value,
                     };
-                    if (!isEdit) payload.password = document.getElementById('inp-password').value;
-                    if (isEdit) payload.user_id = currentEditId.toString();
+                    if (!isEdit) {
+                        // Tambah user baru — password wajib
+                        payload.password = newPw;
+                    } else {
+                        payload.user_id = currentEditId.toString();
+                        // Simpan password baru jika diisi (admin reset)
+                        if (newPw && newPw.trim() !== '') {
+                            payload._adminNewPassword = newPw; // flag internal, dihandle setelah update profil
+                        }
+                    }
                 }
+
+                // Pisahkan password admin_reset dari payload utama
+                const adminNewPassword = payload._adminNewPassword || null;
+                delete payload._adminNewPassword;
 
                 const res = await fetch(`${API_BASE_URL}/${currentTargetFitur}.php`, {
                     method,
@@ -448,7 +506,36 @@
                 try { const j = JSON.parse(resText); if (j.status === 'error' || j.success === false) ok = false; } catch {}
 
                 if (ok) {
-                    showToast(isEdit ? 'Data berhasil diperbarui!' : 'Data berhasil ditambahkan!', 'success');
+                    // Jika ada password baru dari admin, kirim request reset terpisah
+                    if (isEdit && adminNewPassword && currentTargetFitur === 'users') {
+                        if (adminNewPassword.length < 6) {
+                            showToast('Profil disimpan, tapi password minimal 6 karakter — password tidak diubah.', 'info');
+                        } else {
+                            const resPw = await fetch(`${API_BASE_URL}/users.php`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    user_id: currentEditId.toString(),
+                                    new_password: adminNewPassword,
+                                    admin_reset: true
+                                })
+                            });
+                            const resPwJson = await resPw.json();
+                            if (resPwJson.status === 'success') {
+                                showToast('Profil & password berhasil diperbarui!', 'success');
+                                if (currentEditId.toString() === sessionStorage.getItem("user_id")) {
+                                    alert("Password Anda berhasil diperbarui! Silakan login kembali dengan password baru.");
+                                    sessionStorage.clear();
+                                    window.location.href = "logout.php";
+                                    return;
+                                }
+                            } else {
+                                showToast('Profil disimpan, gagal reset password: ' + resPwJson.message, 'error');
+                            }
+                        }
+                    } else {
+                        showToast(isEdit ? 'Data berhasil diperbarui!' : 'Data berhasil ditambahkan!', 'success');
+                    }
                     closeModal();
                     refreshDashboardData();
                 } else {
@@ -483,6 +570,8 @@
                 showToast('Error: ' + err, 'error');
             }
         }
+
+
 
         // ─── UPDATE STATUS FILM ───
         async function updateMovieStatus(movieId, newStatus) {
@@ -530,6 +619,10 @@
                 globalCachedMovies.forEach(m => movieMap[m.movie_id] = m.judul);
                 const studioMap = {};
                 globalCachedStudios.forEach(s => studioMap[s.studio_id] = s.nama_studio);
+                const studioCinemaMap = {};
+                globalCachedStudios.forEach(s => {
+                    studioCinemaMap[s.studio_id] = cinemaMap[s.cinema_id] || 'Cinema #' + s.cinema_id;
+                });
 
                 // USERS TABLE
                 document.getElementById('table-users-body').innerHTML = users.length ? users.map(u => `
@@ -540,7 +633,7 @@
                         <td class="p-4 text-slate-500">${u.no_hp || '-'}</td>
                         <td class="p-4"><span class="px-2 py-0.5 text-xs font-black rounded-full border ${u.role === 'admin' ? 'bg-violet/10 text-violet border-violet/20' : 'bg-slate-100 text-slate-600 border-slate-200'} uppercase">${u.role || 'user'}</span></td>
                         <td class="p-4 text-center whitespace-nowrap">
-                            <button onclick='openUserModal(${JSON.stringify(u)})' class="text-blue-500 hover:text-blue-700 font-bold text-xs mr-3 cursor-pointer hover:underline">Edit</button>
+                            <button onclick='openUserModal(${JSON.stringify(u)})' class="text-blue-500 hover:text-blue-700 font-bold text-xs mr-2 cursor-pointer hover:underline">Edit</button>
                             <button onclick="deleteData('users','user_id',${u.user_id},'${u.nama}')" class="text-red-500 hover:text-red-700 font-bold text-xs cursor-pointer hover:underline">Hapus</button>
                         </td>
                     </tr>`).join('') : `<tr><td colspan="6" class="p-8 text-center text-slate-400 text-sm">Tidak ada data pengguna.</td></tr>`;
@@ -597,6 +690,7 @@
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-4 font-mono text-slate-400 text-xs">#${s.showtime_id}</td>
                         <td class="p-4 text-slate-700 font-medium text-sm max-w-[160px] truncate" title="${movieMap[s.movie_id] || ''}">${movieMap[s.movie_id] || 'Film #'+s.movie_id}</td>
+                        <td class="p-4 text-slate-600 text-sm">${studioCinemaMap[s.studio_id] || '-'}</td>
                         <td class="p-4 text-slate-600 text-sm">${studioMap[s.studio_id] || 'Studio #'+s.studio_id}</td>
                         <td class="p-4 text-slate-600 text-sm">${s.tanggal || '-'}</td>
                         <td class="p-4 font-bold text-violet text-sm">${(s.jam || '-').substring(0,5)}</td>
@@ -605,7 +699,7 @@
                             <button onclick='openShowtimeModal(${JSON.stringify(s)})' class="text-blue-500 hover:text-blue-700 font-bold text-xs mr-3 cursor-pointer hover:underline">Edit</button>
                             <button onclick="deleteData('showtimes','showtime_id',${s.showtime_id},'Jadwal #${s.showtime_id}')" class="text-red-500 hover:text-red-700 font-bold text-xs cursor-pointer hover:underline">Hapus</button>
                         </td>
-                    </tr>`).join('') : `<tr><td colspan="7" class="p-8 text-center text-slate-400 text-sm">Tidak ada jadwal tayang.</td></tr>`;
+                    </tr>`).join('') : `<tr><td colspan="8" class="p-8 text-center text-slate-400 text-sm">Tidak ada jadwal tayang.</td></tr>`;
 
             } catch (err) {
                 console.error("Load data error:", err);
